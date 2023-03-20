@@ -63,3 +63,72 @@ mod some_to_err_tests {
         assert_eq!(result, Ok("Success"));
     }
 }
+
+/// The `SomeToErrElse` trait provides a convenient method to convert an `Option<T>` into a `Result<OK, T>`
+/// by supplying a closure that generates the `OK` value for the `Result` when the input is `None`.
+///
+/// # Examples
+///
+/// Basic usage:
+///
+/// ```
+/// use some_to_err::SomeToErrElse;
+///
+/// let input: Option<&str> = None;
+/// let result = input.some_to_err_else(|| "OK");
+/// assert_eq!(result, Ok("OK"));
+/// ```
+///
+/// ```
+/// use some_to_err::SomeToErrElse;
+///
+/// let input = Some("Error");
+/// let result = input.some_to_err_else(|| "OK");
+/// assert_eq!(result, Err("Error"));
+/// ```
+pub trait SomeToErrElse {
+    type Err;
+    fn some_to_err_else<OK>(self, ok: impl FnOnce() -> OK) -> Result<OK, Self::Err>;
+}
+impl<T> SomeToErrElse for Option<T> {
+    type Err = T;
+    fn some_to_err_else<OK>(self, ok: impl FnOnce() -> OK) -> Result<OK, Self::Err> {
+        match self {
+            Some(err) => Err(err),
+            None => Ok(ok()),
+        }
+    }
+}
+
+#[cfg(test)]
+mod some_to_err_else_tests {
+    use super::SomeToErrElse;
+
+    #[test]
+    fn test_some_to_err_with_some() {
+        let input = Some("Error");
+        let result = input.some_to_err_else(|| "OK");
+        assert_eq!(result, Err("Error"));
+    }
+
+    #[test]
+    fn test_some_to_err_with_none() {
+        let input: Option<&str> = None;
+        let result = input.some_to_err_else(|| "OK");
+        assert_eq!(result, Ok("OK"));
+    }
+
+    #[test]
+    fn test_some_to_err_with_some_and_closure() {
+        let input = Some(2);
+        let result = input.some_to_err_else(|| 3 * 3);
+        assert_eq!(result, Err(2));
+    }
+
+    #[test]
+    fn test_some_to_err_with_none_and_closure() {
+        let input: Option<i32> = None;
+        let result = input.some_to_err_else(|| 3 * 3);
+        assert_eq!(result, Ok(9));
+    }
+}

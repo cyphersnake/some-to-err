@@ -1,9 +1,11 @@
 [package]
 name = "some-to-err"
-version = "0.0.2"
+version = "0.1.0"
 authors = ["cyphersnake <cyphersnake@pm.me>"]
-description = "A trait that provides a method for converting an Option into a Result by treating Some values as Err and None values as Ok."
+description = "A set of traits for converting `Option` to `Result`, providing methods to transform `Some` values to `Err` while handling `None` values as `Ok`, either directly or using a closure to generate the Ok result."
 repository = "https://github.com/cyphersnake/some-to-err"
+homepage = "https://github.com/cyphersnake/some-to-err"
+keywords = ["option", "result", "conversion", "utilities"]
 edition = "2021"
 license = "MIT"
 
