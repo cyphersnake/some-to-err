@@ -12,34 +12,34 @@ cargo add some-to-err
 Or add this to your `Cargo.toml`:
 ```toml
 [dependencies]
-some-to-err = "0.1.1"
+some-to-err = "0.2.0"
 ```
 
 and then:
 ```rust
-use some_to_err::SomeToErr;
+use some_to_err::ErrOr;
 
 {
     let some: Option<&str> = Some("Error");
-    let result = some.some_to_err(42);
+    let result = some.err_or(42);
     assert_eq!(result, Err("Error"));
 }
 
 {
     let none: Option<&str> = None;
-    let result = none.some_to_err(42);
+    let result = none.err_or(42);
     assert_eq!(result, Ok(42));
 }
 
 {
     let input: Option<&str> = None;
-    let result = input.some_to_err_else(|| "Ok");
+    let result = input.err_or(|| "Ok");
     assert_eq!(result, Ok("Ok"));
 }
 
 {
     let input = Some("Error");
-    let result = input.some_to_err_else(|| "Ok");
+    let result = input.err_or(|| "Ok");
     assert_eq!(result, Err("Error"));
 }
 ```
