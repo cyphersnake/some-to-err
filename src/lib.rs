@@ -1,3 +1,5 @@
+#![doc = include_str!("../README.md")]
+
 /// The `SomeErr` trait provides a method for converting an `Option` into a `Result` by treating `Some` values as `Err` and `None` values as `Ok`.
 ///
 /// # Examples

@@ -9,18 +9,6 @@ This crate offers a pair of traits for effortlessly transforming `Option` into `
 
 ## Usage
 
-Add this to your crate by:
-```bash
-cargo add some-to-err
-```
-
-Or add this to your `Cargo.toml`:
-```toml
-[dependencies]
-some-to-err = "0.2.0"
-```
-
-and then:
 ```rust
 use some_to_err::ErrOr;
 
@@ -35,19 +23,19 @@ use some_to_err::ErrOr;
     let result = none.err_or(42);
     assert_eq!(result, Ok(42));
 }
+```
 
+```rust
+use some_to_err::ErrOrElse;
 {
     let input: Option<&str> = None;
-    let result = input.err_or(|| "Ok");
+    let result = input.err_or_else(|| "Ok");
     assert_eq!(result, Ok("Ok"));
 }
 
 {
     let input = Some("Error");
-    let result = input.err_or(|| "Ok");
+    let result = input.err_or_else(|| "Ok");
     assert_eq!(result, Err("Error"));
 }
 ```
-
-## License
-- MIT license (LICENSE-MIT or http://opensource.org/licenses/MIT)
